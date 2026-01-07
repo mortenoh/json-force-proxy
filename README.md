@@ -1,123 +1,102 @@
 # json-force-proxy
 
-A simple proxy server that fixes incorrect `Content-Type` headers for JSON responses.
+A proxy server that forces `Content-Type: application/json` on all responses.
 
-Built with FastAPI, Typer, and Pydantic Settings. Requires Python 3.13+.
+Use this when an upstream API returns JSON data but with the wrong Content-Type header (e.g., `text/html` instead of `application/json`).
 
-## The Problem
-
-Some upstream services return JSON data but with an incorrect `Content-Type` header (e.g., `text/html` instead of `application/json`). This commonly happens when an nginx reverse proxy is misconfigured.
-
-### Common Causes (nginx)
-
-1. **Missing `proxy_pass_header`** - nginx isn't forwarding the upstream Content-Type:
-   ```nginx
-   location /api/ {
-       proxy_pass http://upstream:port;
-       # Content-Type from upstream is lost
-   }
-   ```
-
-2. **`default_type text/html`** - nginx's default when it doesn't recognize/pass the type
-
-3. **Explicit override** - an `add_header` directive is overwriting the type:
-   ```nginx
-   add_header Content-Type "text/html";  # overwrites everything
-   ```
-
-### nginx Fix
-
-If you control the nginx server, fix it there:
-
-```nginx
-location /api/ {
-    proxy_pass http://upstream:port;
-    proxy_pass_header Content-Type;
-}
-```
-
-Or explicitly set the correct type:
-
-```nginx
-location /api/endpoint {
-    proxy_pass http://upstream:port;
-    default_type application/json;
-}
-```
-
-## Using This Proxy (Workaround)
-
-If you don't control the nginx server, use this proxy as a workaround.
-
-### Installation
+## Quick Start
 
 ```bash
-make install
-# or
+# Install
 uv sync
+
+# Start proxy (default: proxies to https://jsonplaceholder.typicode.com)
+uv run json-force-proxy
+
+# Access via proxy - paths are forwarded to target
+curl http://localhost:8080/users      # -> https://jsonplaceholder.typicode.com/users
+curl http://localhost:8080/posts/1    # -> https://jsonplaceholder.typicode.com/posts/1
 ```
 
-### Configuration
+## Example
 
-Configuration is loaded from environment variables (with `JSON_FORCE_PROXY_` prefix) or a `.env` file. CLI options override environment settings.
+Upstream API returns JSON with wrong Content-Type:
 
-| Variable | CLI Option | Default | Description |
-|----------|------------|---------|-------------|
-| `JSON_FORCE_PROXY_HOST` | `--host`, `-H` | `0.0.0.0` | Host to bind to |
-| `JSON_FORCE_PROXY_PORT` | `--port`, `-p` | `8080` | Port to listen on |
-| `JSON_FORCE_PROXY_TARGET_URL` | `--target`, `-t` | `https://jsonplaceholder.typicode.com` | Target URL to proxy |
-| `JSON_FORCE_PROXY_LOG_LEVEL` | `--log-level`, `-l` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL) |
-| `JSON_FORCE_PROXY_REQUEST_TIMEOUT` | - | `10.0` | HTTP request timeout in seconds |
+```bash
+$ curl -I https://broken-api.example.com/data
+Content-Type: text/html; charset=utf-8   # Wrong!
+
+$ curl https://broken-api.example.com/data
+{"status": "ok", "data": [...]}          # But it's JSON
+```
+
+Use json-force-proxy to fix it:
+
+```bash
+$ uv run json-force-proxy --target https://broken-api.example.com
+
+$ curl -I http://localhost:8080/data
+Content-Type: application/json           # Fixed!
+```
+
+## CLI Usage
+
+```
+Usage: json-force-proxy [OPTIONS]
+
+Options:
+  -t, --target TEXT      Target URL to proxy
+  -p, --port INTEGER     Port to listen on (default: 8080)
+  -H, --host TEXT        Host to bind to (default: 0.0.0.0)
+  -l, --log-level TEXT   Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  --help                 Show this message and exit
+```
+
+Examples:
+
+```bash
+# Proxy to a specific API
+uv run json-force-proxy --target https://api.example.com
+
+# Custom port
+uv run json-force-proxy --target https://api.example.com --port 3000
+
+# Debug logging
+uv run json-force-proxy --target https://api.example.com --log-level DEBUG
+
+# Short options
+uv run json-force-proxy -t https://api.example.com -p 3000 -l DEBUG
+```
+
+## Configuration
+
+Settings can be configured via environment variables or a `.env` file. CLI options override environment settings.
+
+| Environment Variable | CLI Option | Default |
+|---------------------|------------|---------|
+| `JSON_FORCE_PROXY_TARGET_URL` | `--target`, `-t` | `https://jsonplaceholder.typicode.com` |
+| `JSON_FORCE_PROXY_PORT` | `--port`, `-p` | `8080` |
+| `JSON_FORCE_PROXY_HOST` | `--host`, `-H` | `0.0.0.0` |
+| `JSON_FORCE_PROXY_LOG_LEVEL` | `--log-level`, `-l` | `INFO` |
+| `JSON_FORCE_PROXY_REQUEST_TIMEOUT` | - | `10.0` |
 
 Example `.env` file:
 
 ```env
-JSON_FORCE_PROXY_HOST=127.0.0.1
+JSON_FORCE_PROXY_TARGET_URL=https://api.example.com
 JSON_FORCE_PROXY_PORT=9000
-JSON_FORCE_PROXY_TARGET_URL=https://jsonplaceholder.typicode.com
 JSON_FORCE_PROXY_LOG_LEVEL=DEBUG
 ```
 
-### Usage
+## Development
 
-```bash
-# Run with defaults (proxies to https://jsonplaceholder.typicode.com)
-uv run json-force-proxy serve
-
-# Then access via proxy:
-# http://localhost:8080/users    -> https://jsonplaceholder.typicode.com/users
-# http://localhost:8080/posts/1  -> https://jsonplaceholder.typicode.com/posts/1
-
-# Custom port and target
-uv run json-force-proxy serve --port 3000 --target https://api.example.com
-
-# With debug logging
-uv run json-force-proxy serve --log-level DEBUG
-
-# Show help
-uv run json-force-proxy --help
-```
-
-The proxy will:
-- Listen on the specified port (default: 8080)
-- Forward request paths to the target URL (e.g., `/users` → `{target}/users`)
-- Return all responses with `Content-Type: application/json`
-
-### Make Targets
+Requires Python 3.13+.
 
 ```bash
 make install   # Install dependencies
-make lint      # Run ruff format, ruff check, mypy, pyright
+make lint      # Run ruff, mypy, pyright
 make test      # Run tests
 make run       # Run the proxy server
-make dist      # Build distribution packages (wheel + sdist)
+make dist      # Build wheel + sdist
 make clean     # Clean up cache files
-```
-
-### Running Tests
-
-```bash
-make test
-# or
-uv run pytest
 ```
