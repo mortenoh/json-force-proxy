@@ -7,14 +7,18 @@ on:
     branches: [main]
 
 jobs:
-  ci:
+  lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v4
-      - run: uv sync --all-extras
-      - run: uv run ruff format --check .
-      - run: uv run ruff check .
-      - run: uv run mypy .
-      - run: uv run pyright
-      - run: uv run pytest -q
+      - run: make install
+      - run: make lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - run: make install
+      - run: make test
