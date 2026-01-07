@@ -1,4 +1,4 @@
-.PHONY: help install lint test run dist clean
+.PHONY: help install lint test run dist docs docs-serve clean
 
 # ==============================================================================
 # Venv
@@ -21,6 +21,8 @@ help:
 	@echo "  test         Run tests"
 	@echo "  run          Run the proxy server"
 	@echo "  dist         Build distribution packages"
+	@echo "  docs         Build documentation"
+	@echo "  docs-serve   Serve documentation locally"
 	@echo "  clean        Clean up temporary files"
 
 install:
@@ -50,6 +52,14 @@ dist:
 	@echo ">>> Building distribution packages"
 	@$(UV) build
 
+docs:
+	@echo ">>> Building documentation"
+	@$(UV) run mkdocs build
+
+docs-serve:
+	@echo ">>> Serving documentation"
+	@$(UV) run mkdocs serve
+
 clean:
 	@echo ">>> Cleaning up"
 	@find . -type f -name "*.pyc" -delete
@@ -58,7 +68,7 @@ clean:
 	@find . -type d -name ".ruff_cache" -exec rm -rf {} + 2>/dev/null || true
 	@find . -type d -name ".mypy_cache" -exec rm -rf {} + 2>/dev/null || true
 	@rm -rf .coverage htmlcov coverage.xml
-	@rm -rf dist build *.egg-info
+	@rm -rf dist build *.egg-info site
 
 # ==============================================================================
 # Default

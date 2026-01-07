@@ -1,0 +1,20 @@
+site_name: json-force-proxy
+site_url: https://mortenoh.github.io/json-force-proxy
+repo_url: https://github.com/mortenoh/json-force-proxy
+repo_name: mortenoh/json-force-proxy
+
+theme:
+  name: material
+  palette:
+    scheme: slate
+    primary: blue
+    accent: light-blue
+
+nav:
+  - Home: index.md
+  - Usage: usage.md
+  - Configuration: configuration.md
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences
