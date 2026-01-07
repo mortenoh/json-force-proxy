@@ -37,7 +37,7 @@ lint:
 
 test:
 	@echo ">>> Running tests"
-	@$(UV) run pytest
+	@$(UV) run pytest -q
 
 run:
 	@$(UV) run json-force-proxy
