@@ -3,6 +3,7 @@ name = "json-force-proxy"
 version = "0.1.0"
 description = "A simple proxy server that fixes incorrect Content-Type headers for JSON responses"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.104.0",
