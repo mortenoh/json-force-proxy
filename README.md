@@ -1,5 +1,8 @@
 # json-force-proxy
 
+[![Docker](https://github.com/mortenoh/json-force-proxy/actions/workflows/docker.yml/badge.svg)](https://github.com/mortenoh/json-force-proxy/actions/workflows/docker.yml)
+[![GitHub Container Registry](https://img.shields.io/badge/ghcr.io-mortenoh%2Fjson--force--proxy-blue?logo=github)](https://github.com/mortenoh/json-force-proxy/pkgs/container/json-force-proxy)
+
 A proxy server that forces `Content-Type: application/json` on all responses.
 
 Use this when an upstream API returns JSON data but with the wrong Content-Type header (e.g., `text/html` instead of `application/json`).
