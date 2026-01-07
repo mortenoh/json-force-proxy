@@ -39,6 +39,10 @@ test:
 	@echo ">>> Running tests"
 	@$(UV) run pytest -q
 
+test-timed:
+	@echo ">>> Running tests with timing"
+	@$(UV) run pytest -v --durations=10
+
 run:
 	@$(UV) run json-force-proxy
 

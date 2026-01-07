@@ -105,7 +105,7 @@ class MockServer:
         self.thread = threading.Thread(target=self.server.run, daemon=True)
         self.thread.start()
         # Wait for server to start
-        time.sleep(0.5)
+        time.sleep(0.1)
 
     def stop(self) -> None:
         """Stop the server."""
@@ -115,7 +115,7 @@ class MockServer:
             self.thread.join(timeout=1)
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def mock_upstream() -> Generator[str, None, None]:
     """Start a mock upstream server and return its URL."""
     port = 19876
@@ -134,7 +134,6 @@ def proxy_client(mock_upstream: str) -> Generator[TestClient, None, None]:
     os.environ["JSON_FORCE_PROXY_TARGET_URL"] = mock_upstream
     get_settings.cache_clear()
     yield TestClient(proxy_app)
-    os.environ.pop("JSON_FORCE_PROXY_TARGET_URL", None)
     get_settings.cache_clear()
 
 
