@@ -107,6 +107,7 @@ make install   # Install dependencies
 make lint      # Run ruff format, ruff check, mypy, pyright
 make test      # Run tests
 make run       # Run the proxy server
+make dist      # Build distribution packages (wheel + sdist)
 make clean     # Clean up cache files
 ```
 

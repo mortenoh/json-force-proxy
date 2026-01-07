@@ -1,4 +1,4 @@
-.PHONY: help install lint test run clean
+.PHONY: help install lint test run dist clean
 
 # ==============================================================================
 # Venv
@@ -20,6 +20,7 @@ help:
 	@echo "  lint         Run linter and type checker"
 	@echo "  test         Run tests"
 	@echo "  run          Run the proxy server"
+	@echo "  dist         Build distribution packages"
 	@echo "  clean        Clean up temporary files"
 
 install:
@@ -40,6 +41,10 @@ test:
 
 run:
 	@$(UV) run json-force-proxy
+
+dist:
+	@echo ">>> Building distribution packages"
+	@$(UV) build
 
 clean:
 	@echo ">>> Cleaning up"
