@@ -69,3 +69,19 @@ All response headers from the upstream are preserved, except:
 - `Content-Length`
 - `Transfer-Encoding`
 - `Connection`
+
+## Docker
+
+```bash
+# Run with Docker
+docker run -p 8080:8080 ghcr.io/mortenoh/json-force-proxy -t https://api.example.com
+
+# With environment variables
+docker run -p 8080:8080 \
+  -e JSON_FORCE_PROXY_TARGET_URL=https://api.example.com \
+  -e JSON_FORCE_PROXY_LOG_LEVEL=DEBUG \
+  ghcr.io/mortenoh/json-force-proxy
+
+# Custom port mapping
+docker run -p 3000:8080 ghcr.io/mortenoh/json-force-proxy -t https://api.example.com
+```

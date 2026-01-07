@@ -12,6 +12,9 @@ uv tool install json-force-proxy --from git+https://github.com/mortenoh/json-for
 
 # Or run directly without installing
 uvx --from git+https://github.com/mortenoh/json-force-proxy json-force-proxy -t https://api.example.com
+
+# Or use Docker
+docker run -p 8080:8080 ghcr.io/mortenoh/json-force-proxy -t https://api.example.com
 ```
 
 ## Quick Example
