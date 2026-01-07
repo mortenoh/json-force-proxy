@@ -66,7 +66,6 @@ Configuration is loaded from environment variables (with `JSON_FORCE_PROXY_` pre
 | `JSON_FORCE_PROXY_HOST` | `--host`, `-H` | `0.0.0.0` | Host to bind to |
 | `JSON_FORCE_PROXY_PORT` | `--port`, `-p` | `8080` | Port to listen on |
 | `JSON_FORCE_PROXY_TARGET_URL` | `--target`, `-t` | `https://jsonplaceholder.typicode.com` | Target URL to proxy |
-| `JSON_FORCE_PROXY_RELOAD` | `--reload`, `-r` | `false` | Enable auto-reload |
 | `JSON_FORCE_PROXY_LOG_LEVEL` | `--log-level`, `-l` | `INFO` | Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL) |
 | `JSON_FORCE_PROXY_REQUEST_TIMEOUT` | - | `10.0` | HTTP request timeout in seconds |
 
@@ -92,8 +91,8 @@ uv run json-force-proxy serve
 # Custom port and target
 uv run json-force-proxy serve --port 3000 --target https://api.example.com
 
-# With auto-reload and debug logging
-uv run json-force-proxy serve --reload --log-level DEBUG
+# With debug logging
+uv run json-force-proxy serve --log-level DEBUG
 
 # Show help
 uv run json-force-proxy --help

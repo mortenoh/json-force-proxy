@@ -241,7 +241,6 @@ class TestConfiguration:
         settings = Settings()
         assert settings.host == "0.0.0.0"
         assert settings.port == 8080
-        assert settings.reload is False
         assert settings.log_level == LogLevel.INFO
         assert settings.request_timeout == 10.0
         assert settings.target_url == "https://jsonplaceholder.typicode.com"
@@ -269,13 +268,6 @@ class TestConfiguration:
             get_settings.cache_clear()
             settings = get_settings()
             assert settings.host == "127.0.0.1"
-
-    def test_settings_from_environment_reload(self) -> None:
-        """Test that reload can be set from environment."""
-        with patch.dict("os.environ", {"JSON_FORCE_PROXY_RELOAD": "true"}):
-            get_settings.cache_clear()
-            settings = get_settings()
-            assert settings.reload is True
 
     def test_settings_from_environment_log_level(self) -> None:
         """Test that log level can be set from environment."""

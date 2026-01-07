@@ -34,7 +34,6 @@ class Settings(BaseSettings):
         default="https://jsonplaceholder.typicode.com",
         description="Target URL to proxy",
     )
-    reload: bool = Field(default=False, description="Enable auto-reload for development")
     log_level: LogLevel = Field(default=LogLevel.INFO, description="Logging level")
     request_timeout: float = Field(default=10.0, description="HTTP request timeout in seconds")
 
