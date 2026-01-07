@@ -20,9 +20,13 @@ def client() -> TestClient:
 
 @pytest.fixture(autouse=True)
 def reset_settings_cache() -> Generator[None, None, None]:
-    """Reset settings cache before each test."""
+    """Reset settings cache and set default target URL for tests."""
+    import os
+
+    os.environ["JSON_FORCE_PROXY_TARGET_URL"] = "https://api.example.com"
     get_settings.cache_clear()
     yield
+    os.environ.pop("JSON_FORCE_PROXY_TARGET_URL", None)
     get_settings.cache_clear()
 
 
@@ -392,12 +396,18 @@ class TestConfiguration:
 
     def test_settings_defaults(self) -> None:
         """Test that settings have sensible defaults."""
+        import os
+
+        # Temporarily remove target_url from env to test default
+        os.environ.pop("JSON_FORCE_PROXY_TARGET_URL", None)
+        get_settings.cache_clear()
+
         settings = Settings()
         assert settings.host == "0.0.0.0"
         assert settings.port == 8080
         assert settings.log_level == LogLevel.INFO
         assert settings.request_timeout == 10.0
-        assert settings.target_url == "https://jsonplaceholder.typicode.com"
+        assert settings.target_url is None
 
     def test_settings_from_environment_target_url(self) -> None:
         """Test that target URL can be set from environment."""

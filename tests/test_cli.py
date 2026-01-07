@@ -50,8 +50,8 @@ class TestCLITargetOption:
 
             assert "Proxying: https://example.com/api" in result.output
 
-    def test_default_target_used_when_not_specified(self) -> None:
-        """Test that default target is used when --target is not specified."""
+    def test_error_when_target_not_specified(self) -> None:
+        """Test that error is shown when --target is not specified."""
         # Clear the env var if set from previous test
         os.environ.pop("JSON_FORCE_PROXY_TARGET_URL", None)
 
@@ -60,7 +60,8 @@ class TestCLITargetOption:
 
             result = runner.invoke(app, [])
 
-            assert "Proxying: https://jsonplaceholder.typicode.com" in result.output
+            assert result.exit_code == 1
+            assert "Error: --target is required" in result.output
 
 
 class TestCLIPortOption:
@@ -71,7 +72,7 @@ class TestCLIPortOption:
         with patch("json_force_proxy.cli.uvicorn.run") as mock_uvicorn:
             get_settings.cache_clear()
 
-            runner.invoke(app, ["--port", "9000"])
+            runner.invoke(app, ["--target", "https://example.com", "--port", "9000"])
 
             mock_uvicorn.assert_called_once()
             call_kwargs = mock_uvicorn.call_args[1]
@@ -82,7 +83,7 @@ class TestCLIPortOption:
         with patch("json_force_proxy.cli.uvicorn.run"):
             get_settings.cache_clear()
 
-            result = runner.invoke(app, ["--port", "9000"])
+            result = runner.invoke(app, ["--target", "https://example.com", "--port", "9000"])
 
             assert "http://0.0.0.0:9000" in result.output
 
@@ -95,7 +96,7 @@ class TestCLIHostOption:
         with patch("json_force_proxy.cli.uvicorn.run") as mock_uvicorn:
             get_settings.cache_clear()
 
-            runner.invoke(app, ["--host", "127.0.0.1"])
+            runner.invoke(app, ["--target", "https://example.com", "--host", "127.0.0.1"])
 
             mock_uvicorn.assert_called_once()
             call_kwargs = mock_uvicorn.call_args[1]
@@ -110,7 +111,7 @@ class TestCLILogLevelOption:
         with patch("json_force_proxy.cli.uvicorn.run") as mock_uvicorn:
             get_settings.cache_clear()
 
-            runner.invoke(app, ["--log-level", "DEBUG"])
+            runner.invoke(app, ["--target", "https://example.com", "--log-level", "DEBUG"])
 
             mock_uvicorn.assert_called_once()
             call_kwargs = mock_uvicorn.call_args[1]
@@ -121,7 +122,7 @@ class TestCLILogLevelOption:
         with patch("json_force_proxy.cli.uvicorn.run"):
             get_settings.cache_clear()
 
-            result = runner.invoke(app, ["--log-level", "DEBUG"])
+            result = runner.invoke(app, ["--target", "https://example.com", "--log-level", "DEBUG"])
 
             assert "Log level: DEBUG" in result.output
 

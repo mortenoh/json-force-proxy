@@ -19,11 +19,11 @@ uv tool install .
 ## Quick Start
 
 ```bash
-# For development, install dependencies
-uv sync
+# Start proxy to any API
+uv run json-force-proxy --target https://api.example.com
 
-# Start proxy (default: proxies to https://jsonplaceholder.typicode.com)
-uv run json-force-proxy
+# Try with jsonplaceholder (a free test API)
+uv run json-force-proxy --target https://jsonplaceholder.typicode.com
 
 # Access via proxy - paths are forwarded to target
 curl http://localhost:8080/users      # -> https://jsonplaceholder.typicode.com/users
@@ -95,7 +95,7 @@ Settings can be configured via environment variables or a `.env` file. CLI optio
 
 | Environment Variable | CLI Option | Default |
 |---------------------|------------|---------|
-| `JSON_FORCE_PROXY_TARGET_URL` | `--target`, `-t` | `https://jsonplaceholder.typicode.com` |
+| `JSON_FORCE_PROXY_TARGET_URL` | `--target`, `-t` | (required) |
 | `JSON_FORCE_PROXY_PORT` | `--port`, `-p` | `8080` |
 | `JSON_FORCE_PROXY_HOST` | `--host`, `-H` | `0.0.0.0` |
 | `JSON_FORCE_PROXY_LOG_LEVEL` | `--log-level`, `-l` | `INFO` |

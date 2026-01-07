@@ -80,6 +80,12 @@ def build_response_headers(upstream_headers: httpx.Headers) -> dict[str, str]:
 async def proxy_request(request: Request, path: str) -> Response:
     """Proxy request to upstream and return with correct Content-Type."""
     settings = get_settings()
+    if not settings.target_url:
+        return Response(
+            content=b"Error: target_url not configured",
+            status_code=500,
+            media_type="text/plain",
+        )
     base_url = settings.target_url.rstrip("/")
     target_url = f"{base_url}/{path}" if path else base_url
 

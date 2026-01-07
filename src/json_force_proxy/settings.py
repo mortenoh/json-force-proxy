@@ -30,9 +30,9 @@ class Settings(BaseSettings):
 
     host: str = Field(default="0.0.0.0", description="Host to bind to")
     port: int = Field(default=8080, description="Port to listen on")
-    target_url: str = Field(
-        default="https://jsonplaceholder.typicode.com",
-        description="Target URL to proxy",
+    target_url: str | None = Field(
+        default=None,
+        description="Target URL to proxy (required)",
     )
     log_level: LogLevel = Field(default=LogLevel.INFO, description="Logging level")
     request_timeout: float = Field(default=10.0, description="HTTP request timeout in seconds")

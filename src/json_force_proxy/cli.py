@@ -34,6 +34,10 @@ def serve(
     effective_target = target if target is not None else settings.target_url
     effective_log_level = log_level if log_level is not None else settings.log_level
 
+    if not effective_target:
+        typer.echo("Error: --target is required (or set JSON_FORCE_PROXY_TARGET_URL)", err=True)
+        raise typer.Exit(1)
+
     # Create effective settings for logging configuration
     effective_settings = Settings(
         host=effective_host,
