@@ -26,19 +26,20 @@ app.add_middleware(
 @app.get("/")
 async def proxy_root() -> Response:
     """Proxy the root path to the target URL."""
-    return await proxy_request()
+    return await proxy_request("")
 
 
 @app.get("/{path:path}")
 async def proxy_path(path: str) -> Response:
     """Proxy any path to the target URL."""
-    return await proxy_request()
+    return await proxy_request(path)
 
 
-async def proxy_request() -> Response:
+async def proxy_request(path: str) -> Response:
     """Fetch from upstream and return with correct Content-Type."""
     settings = get_settings()
-    target_url = settings.target_url
+    base_url = settings.target_url.rstrip("/")
+    target_url = f"{base_url}/{path}" if path else base_url
     timeout = settings.request_timeout
 
     logger.debug("Proxying request to %s", target_url)

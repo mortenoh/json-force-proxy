@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     host: str = Field(default="0.0.0.0", description="Host to bind to")
     port: int = Field(default=8080, description="Port to listen on")
     target_url: str = Field(
-        default="http://168.253.224.242:9091/dst/info",
+        default="https://jsonplaceholder.typicode.com",
         description="Target URL to proxy",
     )
     reload: bool = Field(default=False, description="Enable auto-reload for development")
