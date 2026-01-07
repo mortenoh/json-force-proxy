@@ -1,5 +1,6 @@
 """CLI interface using Typer."""
 
+import os
 from typing import Annotated, Optional
 
 import typer
@@ -45,6 +46,11 @@ def serve(
         request_timeout=settings.request_timeout,
     )
     configure_logging(effective_settings)
+
+    # Set environment variables so the server process picks them up
+    os.environ["JSON_FORCE_PROXY_TARGET_URL"] = effective_target
+    os.environ["JSON_FORCE_PROXY_REQUEST_TIMEOUT"] = str(effective_settings.request_timeout)
+    get_settings.cache_clear()
 
     typer.echo(f"Proxying: {effective_target}")
     typer.echo(f"Listening on: http://{effective_host}:{effective_port}")
