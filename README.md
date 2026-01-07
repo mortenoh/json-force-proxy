@@ -39,6 +39,15 @@ $ curl -I http://localhost:8080/data
 Content-Type: application/json           # Fixed!
 ```
 
+## Features
+
+- **All HTTP methods**: GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
+- **Query string forwarding**: `?page=1&limit=10` passed to upstream
+- **Request body forwarding**: JSON and other request bodies proxied
+- **Request header forwarding**: Authorization, Accept, Content-Type, and X-* headers
+- **Response header preservation**: Upstream headers preserved (except Content-Type)
+- **CORS enabled**: All origins allowed
+
 ## CLI Usage
 
 ```
