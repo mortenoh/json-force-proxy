@@ -4,10 +4,22 @@ A proxy server that forces `Content-Type: application/json` on all responses.
 
 Use this when an upstream API returns JSON data but with the wrong Content-Type header (e.g., `text/html` instead of `application/json`).
 
+## Installation
+
+```bash
+# Install as a global tool (from GitHub)
+uv tool install json-force-proxy --from git+https://github.com/mortenoh/json-force-proxy
+
+# Or install from local clone
+git clone https://github.com/mortenoh/json-force-proxy
+cd json-force-proxy
+uv tool install .
+```
+
 ## Quick Start
 
 ```bash
-# Install
+# For development, install dependencies
 uv sync
 
 # Start proxy (default: proxies to https://jsonplaceholder.typicode.com)
