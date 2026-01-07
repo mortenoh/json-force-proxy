@@ -1,7 +1,11 @@
 # json-force-proxy
 
+[![CI](https://github.com/mortenoh/json-force-proxy/actions/workflows/ci.yml/badge.svg)](https://github.com/mortenoh/json-force-proxy/actions/workflows/ci.yml)
 [![Docker](https://github.com/mortenoh/json-force-proxy/actions/workflows/docker.yml/badge.svg)](https://github.com/mortenoh/json-force-proxy/actions/workflows/docker.yml)
-[![GitHub Container Registry](https://img.shields.io/badge/ghcr.io-mortenoh%2Fjson--force--proxy-blue?logo=github)](https://github.com/mortenoh/json-force-proxy/pkgs/container/json-force-proxy)
+[![Docs](https://github.com/mortenoh/json-force-proxy/actions/workflows/docs.yml/badge.svg)](https://mortenoh.github.io/json-force-proxy/)
+[![GHCR](https://img.shields.io/badge/ghcr.io-mortenoh%2Fjson--force--proxy-blue)](https://github.com/mortenoh/json-force-proxy/pkgs/container/json-force-proxy)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A proxy server that forces `Content-Type: application/json` on all responses.
 
