@@ -7,23 +7,21 @@ Use this when an upstream API returns JSON data but with the wrong Content-Type 
 ## Installation
 
 ```bash
-# Install as a global tool (from GitHub)
+# Install as a global tool
 uv tool install json-force-proxy --from git+https://github.com/mortenoh/json-force-proxy
 
-# Or install from local clone
-git clone https://github.com/mortenoh/json-force-proxy
-cd json-force-proxy
-uv tool install .
+# Now run it
+json-force-proxy --target https://api.example.com
 ```
 
 ## Quick Start
 
 ```bash
-# Start proxy to any API
-uv run json-force-proxy --target https://api.example.com
+# Start proxy (after installation)
+json-force-proxy --target https://jsonplaceholder.typicode.com
 
-# Try with jsonplaceholder (a free test API)
-uv run json-force-proxy --target https://jsonplaceholder.typicode.com
+# Or run directly without installing
+uvx --from git+https://github.com/mortenoh/json-force-proxy json-force-proxy -t https://jsonplaceholder.typicode.com
 
 # Access via proxy - paths are forwarded to target
 curl http://localhost:8080/users      # -> https://jsonplaceholder.typicode.com/users
@@ -45,7 +43,7 @@ $ curl https://broken-api.example.com/data
 Use json-force-proxy to fix it:
 
 ```bash
-$ uv run json-force-proxy --target https://broken-api.example.com
+$ json-force-proxy --target https://broken-api.example.com
 
 $ curl -I http://localhost:8080/data
 Content-Type: application/json           # Fixed!
@@ -66,10 +64,10 @@ Content-Type: application/json           # Fixed!
 Usage: json-force-proxy [OPTIONS]
 
 Options:
-  -t, --target TEXT      Target URL to proxy
+  -t, --target TEXT      Target URL to proxy (required)
   -p, --port INTEGER     Port to listen on (default: 8080)
   -H, --host TEXT        Host to bind to (default: 0.0.0.0)
-  -l, --log-level TEXT   Logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL
+  -l, --log-level LEVEL  DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO)
   --help                 Show this message and exit
 ```
 
@@ -77,16 +75,16 @@ Examples:
 
 ```bash
 # Proxy to a specific API
-uv run json-force-proxy --target https://api.example.com
+json-force-proxy --target https://api.example.com
 
 # Custom port
-uv run json-force-proxy --target https://api.example.com --port 3000
+json-force-proxy --target https://api.example.com --port 3000
 
 # Debug logging
-uv run json-force-proxy --target https://api.example.com --log-level DEBUG
+json-force-proxy --target https://api.example.com --log-level DEBUG
 
 # Short options
-uv run json-force-proxy -t https://api.example.com -p 3000 -l DEBUG
+json-force-proxy -t https://api.example.com -p 3000 -l DEBUG
 ```
 
 ## Configuration
